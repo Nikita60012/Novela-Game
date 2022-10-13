@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -8,11 +9,12 @@ public class GameNovella extends Game {
 
 	SpriteBatch batch;
 	BitmapFont font;
+	final String madeInProgress = "MADE IN PROGRESS";
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
 		this.setScreen(new MainMenuScreen(this));
 	}
 

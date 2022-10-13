@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280, 720);
 		config.useVsync(true);
 		config.setForegroundFPS(60);
-		config.setTitle("GameNovela");
+		config.setTitle("GameNovella");
 		new Lwjgl3Application(new GameNovella(), config);
 	}
 }
