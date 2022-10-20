@@ -1,0 +1,20 @@
+
+fullScreen_checkBox.png
+size: 256, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+checked_box
+  rotate: false
+  xy: 2, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+unchecked_box
+  rotate: false
+  xy: 68, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
