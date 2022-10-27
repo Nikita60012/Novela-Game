@@ -2,11 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,6 +28,7 @@ public class MainMenuScreen implements Screen {
     private Texture background;
     private Stage stage;
     private BitmapFont textFont;
+    private BitmapFont cirillic;
     Skin skin;
 
 
@@ -37,6 +39,14 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 
+        FileHandle fld = Gdx.files.internal("fonts/FontComicSans.ttf");
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fld);
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЗЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя.,!?-";
+        cirillic = generator.generateFont(parameter);
+        generator.dispose();
 
         stage = new Stage(new StretchViewport(game.WIDTH,game.HEIGHT));
 
@@ -46,10 +56,10 @@ public class MainMenuScreen implements Screen {
 
 
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = textFont;
+        buttonStyle.font = cirillic;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
 
-        exitButton= new TextButton("Quit",buttonStyle);
+        exitButton= new TextButton("Выход",buttonStyle);
         exitButton.setPosition(135, 80);
         exitButton.addListener(new ClickListener(){
             @Override
@@ -58,7 +68,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        optionsButton = new TextButton("Options", buttonStyle);
+        optionsButton = new TextButton("Настройки", buttonStyle);
         optionsButton.setPosition(135,130);
         optionsButton.addListener(new ClickListener(){
             @Override
@@ -68,8 +78,8 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        loadButton = new TextButton("Load", buttonStyle);
-        loadButton.setPosition(135,170);
+        loadButton = new TextButton("Загрузить", buttonStyle);
+        loadButton.setPosition(135,180);
         loadButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -78,8 +88,8 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        startButton = new TextButton("Start", buttonStyle);
-        startButton.setPosition(135,210);
+        startButton = new TextButton("Новая игра", buttonStyle);
+        startButton.setPosition(135,230);
         startButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
