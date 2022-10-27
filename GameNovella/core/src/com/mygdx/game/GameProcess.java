@@ -21,8 +21,6 @@ public class GameProcess implements Screen {
     private OrthographicCamera camera;
     private Texture background;
     private Stage stage;
-    private BitmapFont textFont;
-    Skin skin;
 
     public GameProcess(final GameNovella game){
         this.game = game;
@@ -37,14 +35,12 @@ public class GameProcess implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        textFont = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-
 
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = textFont;
+        buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
 
-        backButton= new TextButton("Back",buttonStyle);
+        backButton= new TextButton("Назад",buttonStyle);
         backButton.setPosition(135, 80);
         backButton.addListener(new ClickListener() {
             @Override
@@ -73,9 +69,9 @@ public class GameProcess implements Screen {
             stage.draw();
         }
         game.batch.begin();
-        game.font.setColor( Color.BROWN);
-        game.font.getData().setScale(1,1);
-        game.font.draw(game.batch, game.madeInProgress, game.WIDTH /2 - 130, game.HEIGHT/2 + 20);
+        game.comicSans.setColor( Color.BROWN);
+        game.comicSans.getData().setScale(1,1);
+        game.comicSans.draw(game.batch, game.madeInProgress, game.WIDTH /2 - 130, game.HEIGHT/2 + 20);
         game.batch.end();
 
 
@@ -105,7 +101,6 @@ public class GameProcess implements Screen {
     @Override
     public void dispose() {
         background.dispose();
-        textFont.dispose();
         stage.dispose();
     }
 }

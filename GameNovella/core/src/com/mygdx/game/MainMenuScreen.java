@@ -2,12 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,9 +26,6 @@ public class MainMenuScreen implements Screen {
     private OrthographicCamera camera;
     private Texture background;
     private Stage stage;
-    private BitmapFont textFont;
-    private BitmapFont cirillic;
-    Skin skin;
 
 
     public MainMenuScreen(final GameNovella game) {
@@ -39,24 +35,13 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 
-        FileHandle fld = Gdx.files.internal("fonts/FontComicSans.ttf");
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fld);
-
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 32;
-        parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЗЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя.,!?-";
-        cirillic = generator.generateFont(parameter);
-        generator.dispose();
 
         stage = new Stage(new StretchViewport(game.WIDTH,game.HEIGHT));
 
         Gdx.input.setInputProcessor(stage);
 
-        textFont = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-
-
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = cirillic;
+        buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
 
         exitButton= new TextButton("Выход",buttonStyle);
@@ -152,7 +137,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
     background.dispose();
-    textFont.dispose();
     stage.dispose();
     }
 }

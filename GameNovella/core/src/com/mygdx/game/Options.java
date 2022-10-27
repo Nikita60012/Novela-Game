@@ -6,18 +6,23 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Options implements Screen {
@@ -28,11 +33,17 @@ public class Options implements Screen {
     private OrthographicCamera camera;
     private Texture background;
     private Stage stage;
-    private BitmapFont textFont;
     private CheckBox.CheckBoxStyle checkBoxStyle;
     private CheckBox fullScreen;
+    private TextureRegionDrawable textureSlider;
+    private Slider.SliderStyle sliderStyle;
+    private Slider sound;
+    private TextureRegionDrawable textureBar;
+    private ProgressBar.ProgressBarStyle barStyle;
+    private ProgressBar bar;
     private boolean fullscreenSwitch;
-    Skin skin;
+    Skin skinSlider;
+    Skin skinCheckBox;
 
     public Options(final GameNovella game){
         this.game = game;
@@ -47,26 +58,43 @@ public class Options implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        textFont = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+
+        /*
+        skinSlider = new Skin();
+        Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skinSlider.add("white", new Texture(pixmap));
+
+        textureBar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("barGreen_horizontalMid.png"))));
+        barStyle = new ProgressBar.ProgressBarStyle(skinSlider.newDrawable("white", Color.DARK_GRAY), textureBar);
+        bar = new ProgressBar(0, 10, 0.5f, false, barStyle);
+        bar.setPosition(100, 100);
+        bar.setSize(290, bar.getPrefHeight());
+        bar.setAnimateDuration(2);
+        stage.addActor(bar);
+
+
+         */
 
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("fullScreen_checkBox.pack"));
-        skin = new Skin();
+        skinCheckBox = new Skin();
 
-        skin.addRegions(atlas);
-        skin.add("font",textFont,BitmapFont.class);
+        skinCheckBox.addRegions(atlas);
+        skinCheckBox.add("font",game.comicSans,BitmapFont.class);
 
         fullscreenSwitch = game.fullScreenMode;
 
         checkBoxStyle = new CheckBox.CheckBoxStyle();
-        checkBoxStyle.font = textFont;
+        checkBoxStyle.font = game.comicSans;
         checkBoxStyle.fontColor = Color.valueOf("#8E8574");
         if(!fullscreenSwitch) {
-            checkBoxStyle.up = new NinePatchDrawable(skin.getPatch("unchecked_box"));
-            checkBoxStyle.down = new NinePatchDrawable(skin.getPatch("checked_box"));
+            checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
+            checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
         }else{
-            checkBoxStyle.up = new NinePatchDrawable(skin.getPatch("checked_box"));
-            checkBoxStyle.down = new NinePatchDrawable(skin.getPatch("unchecked_box"));
+            checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
+            checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
         }
 
         fullScreen = new CheckBox("", checkBoxStyle);
@@ -78,15 +106,15 @@ public class Options implements Screen {
                 fullscreenSwitch = fullScreen.isChecked();
 
                 if(fullscreenSwitch){
-                    checkBoxStyle.up = new NinePatchDrawable(skin.getPatch("checked_box"));
-                    checkBoxStyle.down = new NinePatchDrawable(skin.getPatch("unchecked_box"));
+                    checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
+                    checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
                     Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
                     Gdx.graphics.setFullscreenMode(currentMode);
                     game.fullScreenMode = true;
 
                 }else{
-                    checkBoxStyle.up = new NinePatchDrawable(skin.getPatch("unchecked_box"));
-                    checkBoxStyle.down = new NinePatchDrawable(skin.getPatch("checked_box"));
+                    checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
+                    checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
                     Gdx.graphics.setWindowedMode(game.WIDTH, game.HEIGHT);
                     game.fullScreenMode = false;
                 }
@@ -98,10 +126,10 @@ public class Options implements Screen {
         });
 
         buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = textFont;
+        buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
 
-        backButton= new TextButton("Back",buttonStyle);
+        backButton= new TextButton("Назад",buttonStyle);
         backButton.setPosition(135, 80);
         backButton.addListener(new ClickListener() {
             @Override
@@ -131,9 +159,9 @@ public class Options implements Screen {
             stage.draw();
         }
         game.batch.begin();
-        game.font.setColor( Color.BROWN);
-        game.font.getData().setScale(1,1);
-        game.font.draw(game.batch, game.madeInProgress, game.WIDTH/2 - 130, game.HEIGHT/2 + 20);
+        game.comicSans.setColor( Color.BROWN);
+        game.comicSans.getData().setScale(1,1);
+        game.comicSans.draw(game.batch, game.madeInProgress, game.WIDTH/2 - 130, game.HEIGHT/2 + 20);
         game.batch.end();
 
 
@@ -164,7 +192,6 @@ public class Options implements Screen {
     @Override
     public void dispose() {
         background.dispose();
-        textFont.dispose();
         stage.dispose();
     }
 }

@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
-import sun.font.TrueTypeFont;
-
 public class GameNovella extends Game {
 
 	SpriteBatch batch;
-	BitmapFont font;
-	final String madeInProgress = "MADE IN PROGRESS";
+
+	BitmapFont comicSans;
+	final String madeInProgress = "В процессе разработки";
 	final int WIDTH = 1280;
 	final int HEIGHT = 720;
 	boolean fullScreenMode = false;
@@ -20,7 +19,12 @@ public class GameNovella extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FontComicSans.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 32;
+		parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЗЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя.,!?-";
+		comicSans = generator.generateFont(parameter);
+		generator.dispose();
 
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -32,6 +36,6 @@ public class GameNovella extends Game {
 	public void dispose () {
 		super.dispose();
 		batch.dispose();
-		font.dispose();
+		comicSans.dispose();
 	}
 }
