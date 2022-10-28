@@ -35,14 +35,17 @@ public class Options implements Screen {
     private Stage stage;
     private CheckBox.CheckBoxStyle checkBoxStyle;
     private CheckBox fullScreen;
+    private boolean fullscreenSwitch;
+
+    //Слайдер в работе
     private TextureRegionDrawable textureSlider;
     private Slider.SliderStyle sliderStyle;
     private Slider sound;
     private TextureRegionDrawable textureBar;
     private ProgressBar.ProgressBarStyle barStyle;
     private ProgressBar bar;
-    private boolean fullscreenSwitch;
     Skin skinSlider;
+
     Skin skinCheckBox;
 
     public Options(final GameNovella game){
@@ -58,7 +61,7 @@ public class Options implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-
+        //Слайдер в работе
         /*
         skinSlider = new Skin();
         Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
@@ -77,18 +80,23 @@ public class Options implements Screen {
 
          */
 
-
+       //Подгрузка текстур для checkBox
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("fullScreen_checkBox.pack"));
         skinCheckBox = new Skin();
 
+        //Установка текстур для checkBox
         skinCheckBox.addRegions(atlas);
         skinCheckBox.add("font",game.comicSans,BitmapFont.class);
-
-        fullscreenSwitch = game.fullScreenMode;
-
+      
+        //Применение стиля для checkBox
         checkBoxStyle = new CheckBox.CheckBoxStyle();
         checkBoxStyle.font = game.comicSans;
         checkBoxStyle.fontColor = Color.valueOf("#8E8574");
+       
+        //Позволяет постоянно показывать текстуру активированного checkbox, если включён полноэкранный режим
+        fullscreenSwitch = game.fullScreenMode;
+
+       // Реализация изменения текстуры checkbox в зависимости от активности полноэкранного режима
         if(!fullscreenSwitch) {
             checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
             checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
@@ -97,9 +105,12 @@ public class Options implements Screen {
             checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
         }
 
+        //Установка checkbox на экране
         fullScreen = new CheckBox("", checkBoxStyle);
         fullScreen.setChecked(fullscreenSwitch);
         fullScreen.setPosition(135,200);
+
+        //Изменение полноэкранного режима
         fullScreen.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -125,10 +136,12 @@ public class Options implements Screen {
 
         });
 
+        //Установка стиля кнопки возврата
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
 
+        //Реализация кнопки возврата
         backButton= new TextButton("Назад",buttonStyle);
         backButton.setPosition(135, 80);
         backButton.addListener(new ClickListener() {
