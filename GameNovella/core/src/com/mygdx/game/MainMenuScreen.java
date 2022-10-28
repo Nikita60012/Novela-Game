@@ -40,10 +40,12 @@ public class MainMenuScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
+        //Задаётся стиль кнопок
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
-
+        
+        //Реализуется кнопка выхода
         exitButton= new TextButton("Выход",buttonStyle);
         exitButton.setPosition(135, 80);
         exitButton.addListener(new ClickListener(){
@@ -52,7 +54,8 @@ public class MainMenuScreen implements Screen {
                 Gdx.app.exit();
             }
         });
-
+     
+        //Реализуется кнопка настроек
         optionsButton = new TextButton("Настройки", buttonStyle);
         optionsButton.setPosition(135,130);
         optionsButton.addListener(new ClickListener(){
@@ -63,6 +66,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        //Реализуется кнопка загрузки
         loadButton = new TextButton("Загрузить", buttonStyle);
         loadButton.setPosition(135,180);
         loadButton.addListener(new ClickListener(){
@@ -73,6 +77,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        //Реализуется кнопка начала новой игры
         startButton = new TextButton("Новая игра", buttonStyle);
         startButton.setPosition(135,230);
         startButton.addListener(new ClickListener(){
