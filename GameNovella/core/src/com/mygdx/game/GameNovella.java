@@ -19,6 +19,8 @@ public class GameNovella extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+
+                //Реализуется кириллица в шрифте ComicSans
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FontComicSans.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 32;
