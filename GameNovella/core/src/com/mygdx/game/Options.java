@@ -4,6 +4,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -35,23 +37,18 @@ public class Options implements Screen {
     private Stage stage;
     private CheckBox.CheckBoxStyle checkBoxStyle;
     private CheckBox fullScreen;
-    private boolean fullscreenSwitch;
-
-    //Слайдер в работе
-    private TextureRegionDrawable textureSlider;
     private Slider.SliderStyle sliderStyle;
     private Slider sound;
-    private TextureRegionDrawable textureBar;
-    private ProgressBar.ProgressBarStyle barStyle;
-    private ProgressBar bar;
+    private int soundValue = 30;
+    private boolean fullscreenSwitch;
     Skin skinSlider;
-
     Skin skinCheckBox;
 
     public Options(final GameNovella game){
         this.game = game;
 
-        background = new Texture(Gdx.files.internal("menuBackground.png"));
+
+        background = new Texture(Gdx.files.internal("Texture/MainMenu/menuBackground.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
@@ -61,42 +58,46 @@ public class Options implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        //Слайдер в работе
-        /*
+        //Подгрузка и установка текстур ползунка со звуком
+        final TextureAtlas sliderTexture = new TextureAtlas(Gdx.files.internal("Texture/MainMenu/SoundSlider.pack"));
         skinSlider = new Skin();
-        Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skinSlider.add("white", new Texture(pixmap));
+        skinSlider.addRegions(sliderTexture);
+        sliderStyle = new Slider.SliderStyle(new NinePatchDrawable(skinSlider.getPatch("Slider")), new NinePatchDrawable(skinSlider.getPatch("SliderPoint")));
 
-        textureBar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("barGreen_horizontalMid.png"))));
-        barStyle = new ProgressBar.ProgressBarStyle(skinSlider.newDrawable("white", Color.DARK_GRAY), textureBar);
-        bar = new ProgressBar(0, 10, 0.5f, false, barStyle);
-        bar.setPosition(100, 100);
-        bar.setSize(290, bar.getPrefHeight());
-        bar.setAnimateDuration(2);
-        stage.addActor(bar);
+        //Установка расположения ползунка со звуком и задание параметров
+        sound = new Slider(0, 100, 1, false, sliderStyle);
+        sound.setPosition(135,300);
+        sound.setSize(290,sound.getPrefHeight());
+        sound.setAnimateDuration(0);
+        sound.setValue(30);
 
+        //Реализация изменения громкости звука
+        sound.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                soundValue = (int)sound.getValue();
+                game.music.musicSound.setVolume(soundValue * 0.01f);
+            }
+        });
+        stage.addActor(sound);
 
-         */
-
-       //Подгрузка текстур для checkBox
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("fullScreen_checkBox.pack"));
+        //Подгрузка текстур для checkBox
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("Texture/MainMenu/fullScreen_checkBox.pack"));
         skinCheckBox = new Skin();
 
         //Установка текстур для checkBox
         skinCheckBox.addRegions(atlas);
         skinCheckBox.add("font",game.comicSans,BitmapFont.class);
-      
+
+        //Позволяет постоянно показывать текстуру активированного checkbox, если включён полноэкранный режим
+        fullscreenSwitch = game.fullScreenMode;
+
         //Применение стиля для checkBox
         checkBoxStyle = new CheckBox.CheckBoxStyle();
         checkBoxStyle.font = game.comicSans;
         checkBoxStyle.fontColor = Color.valueOf("#8E8574");
-       
-        //Позволяет постоянно показывать текстуру активированного checkbox, если включён полноэкранный режим
-        fullscreenSwitch = game.fullScreenMode;
 
-       // Реализация изменения текстуры checkbox в зависимости от активности полноэкранного режима
+        // Реализация изменения текстуры checkbox в зависимости от активности полноэкранного режима
         if(!fullscreenSwitch) {
             checkBoxStyle.up = new NinePatchDrawable(skinCheckBox.getPatch("unchecked_box"));
             checkBoxStyle.down = new NinePatchDrawable(skinCheckBox.getPatch("checked_box"));
@@ -177,6 +178,12 @@ public class Options implements Screen {
         game.comicSans.draw(game.batch, game.madeInProgress, game.WIDTH/2 - 130, game.HEIGHT/2 + 20);
         game.batch.end();
 
+        game.batch.begin();
+        game.comicSans.setColor(Color.valueOf("#8E8574"));
+        game.comicSans.getData().setScale(0.5f,0.5f);
+        game.comicSans.draw(game.batch, soundValue + "", 440, 315);
+        game.comicSans.getData().setScale(1,1);
+        game.batch.end();
 
         game.batch.setProjectionMatrix(camera.combined);
     }

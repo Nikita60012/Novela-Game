@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,11 +31,11 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(final GameNovella game) {
         this.game = game;
-        background = new Texture(Gdx.files.internal("menuBackground.png"));
+
+        background = new Texture(Gdx.files.internal("Texture/MainMenu/menuBackground.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
-
 
         stage = new Stage(new StretchViewport(game.WIDTH,game.HEIGHT));
 
@@ -44,7 +45,7 @@ public class MainMenuScreen implements Screen {
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
-        
+
         //Реализуется кнопка выхода
         exitButton= new TextButton("Выход",buttonStyle);
         exitButton.setPosition(135, 80);
@@ -54,7 +55,7 @@ public class MainMenuScreen implements Screen {
                 Gdx.app.exit();
             }
         });
-     
+
         //Реализуется кнопка настроек
         optionsButton = new TextButton("Настройки", buttonStyle);
         optionsButton.setPosition(135,130);

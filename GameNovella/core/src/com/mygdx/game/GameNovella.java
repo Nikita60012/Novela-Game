@@ -15,18 +15,23 @@ public class GameNovella extends Game {
 	final int WIDTH = 1280;
 	final int HEIGHT = 720;
 	boolean fullScreenMode = false;
+	TypeOfMusic music = new TypeOfMusic();;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 
-                //Реализуется кириллица в шрифте ComicSans
+		//Реализуется кириллица в шрифте ComicSans
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FontComicSans.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 32;
-		parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЗЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя.,!?-";
+		parameter.characters = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЗЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя.,!?-0123456789+_=:;*/";
 		comicSans = generator.generateFont(parameter);
 		generator.dispose();
+
+		//Вызов класса с музыкой
+		music.music("MainMenu");
+		music.musicSound.setVolume(0.3f);
 
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -39,5 +44,7 @@ public class GameNovella extends Game {
 		super.dispose();
 		batch.dispose();
 		comicSans.dispose();
+		music.musicSound.dispose();
 	}
+
 }

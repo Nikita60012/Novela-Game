@@ -22,10 +22,12 @@ public class Loads implements Screen {
     private Texture background;
     private Stage stage;
 
+
     public Loads(final GameNovella game){
         this.game = game;
 
-        background = new Texture(Gdx.files.internal("menuBackground.png"));
+
+        background = new Texture(Gdx.files.internal("Texture/MainMenu/menuBackground.png"));
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
