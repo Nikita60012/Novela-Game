@@ -20,6 +20,7 @@ public class Loads implements Screen {
     private TextButton backButton;
     private OrthographicCamera camera;
     private Texture background;
+    private Sounds sound;
     private Stage stage;
 
 
@@ -32,6 +33,7 @@ public class Loads implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 
+        sound = new Sounds("MainMenu");
 
         stage = new Stage(new StretchViewport(game.WIDTH, game.HEIGHT));
 
@@ -40,12 +42,14 @@ public class Loads implements Screen {
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
+        buttonStyle.overFontColor = Color.valueOf("#aba498");
 
         backButton= new TextButton("Назад",buttonStyle);
         backButton.setPosition(135, 80);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.playing();
                 game.setScreen(new MainMenuScreen(game));
                 dispose();
             }
@@ -75,6 +79,11 @@ public class Loads implements Screen {
         game.comicSans.draw(game.batch, game.madeInProgress, game.WIDTH /2 - 130, game.HEIGHT/2 + 20);
         game.batch.end();
 
+        if(backButton.isPressed()){
+            backButton.setPosition(135, 70);
+        }else{
+            backButton.setPosition(135, 80);
+        }
 
         game.batch.setProjectionMatrix(camera.combined);
     }

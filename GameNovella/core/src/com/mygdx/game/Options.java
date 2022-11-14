@@ -39,6 +39,7 @@ public class Options implements Screen {
     private CheckBox fullScreen;
     private Slider.SliderStyle sliderStyle;
     private Slider sound;
+    private Sounds clickSound;
     private int soundValue = 30;
     private boolean fullscreenSwitch;
     Skin skinSlider;
@@ -53,6 +54,7 @@ public class Options implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 
+        clickSound = new Sounds("MainMenu");
 
         stage = new Stage(new StretchViewport(game.WIDTH, game.HEIGHT));
 
@@ -66,7 +68,7 @@ public class Options implements Screen {
 
         //Установка расположения ползунка со звуком и задание параметров
         sound = new Slider(0, 100, 1, false, sliderStyle);
-        sound.setPosition(135,300);
+        sound.setPosition(135,350);
         sound.setSize(290,sound.getPrefHeight());
         sound.setAnimateDuration(0);
         sound.setValue(30);
@@ -115,6 +117,9 @@ public class Options implements Screen {
         fullScreen.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+                clickSound.playing();
+
                 fullscreenSwitch = fullScreen.isChecked();
 
                 if(fullscreenSwitch){
@@ -141,6 +146,7 @@ public class Options implements Screen {
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
+        buttonStyle.overFontColor = Color.valueOf("#aba498");
 
         //Реализация кнопки возврата
         backButton= new TextButton("Назад",buttonStyle);
@@ -148,6 +154,7 @@ public class Options implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                clickSound.playing();
                 game.setScreen(new MainMenuScreen(game));
                 dispose();
             }
@@ -181,9 +188,27 @@ public class Options implements Screen {
         game.batch.begin();
         game.comicSans.setColor(Color.valueOf("#8E8574"));
         game.comicSans.getData().setScale(0.5f,0.5f);
-        game.comicSans.draw(game.batch, soundValue + "", 440, 315);
+        game.comicSans.draw(game.batch, soundValue + "", 440, 365);
         game.comicSans.getData().setScale(1,1);
         game.batch.end();
+
+        game.batch.begin();
+        game.comicSans.getData().setScale(0.75f,0.75f);
+        game.comicSans.draw(game.batch, "Громкость музыки",135,390 );
+        game.comicSans.getData().setScale(1,1);
+        game.batch.end();
+
+        game.batch.begin();
+        game.comicSans.getData().setScale(0.6f,0.6f);
+        game.comicSans.draw(game.batch, "Полноэкрамный режим",135,290 );
+        game.comicSans.getData().setScale(1,1);
+        game.batch.end();
+
+        if(backButton.isPressed()){
+            backButton.setPosition(135, 70);
+        }else{
+            backButton.setPosition(135, 80);
+        }
 
         game.batch.setProjectionMatrix(camera.combined);
     }

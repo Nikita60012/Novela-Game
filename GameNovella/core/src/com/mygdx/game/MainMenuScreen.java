@@ -9,11 +9,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import java.awt.Cursor;
+import java.awt.event.MouseEvent;
+
+import javax.swing.event.MouseInputListener;
 
 
 public class MainMenuScreen implements Screen {
@@ -25,6 +31,7 @@ public class MainMenuScreen implements Screen {
     private TextButton loadButton;
     private TextButton startButton;
     private OrthographicCamera camera;
+    private Sounds sound;
     private Texture background;
     private Stage stage;
 
@@ -37,6 +44,9 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.WIDTH, game.HEIGHT);
 
+        sound = new Sounds("MainMenu");
+
+
         stage = new Stage(new StretchViewport(game.WIDTH,game.HEIGHT));
 
         Gdx.input.setInputProcessor(stage);
@@ -45,13 +55,15 @@ public class MainMenuScreen implements Screen {
         buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.font = game.comicSans;
         buttonStyle.fontColor = Color.valueOf("#8E8574");
+        buttonStyle.overFontColor = Color.valueOf("#aba498");
 
         //Реализуется кнопка выхода
-        exitButton= new TextButton("Выход",buttonStyle);
+        exitButton= new TextButton("Выход", buttonStyle);
         exitButton.setPosition(135, 80);
         exitButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.playing();
                 Gdx.app.exit();
             }
         });
@@ -62,6 +74,7 @@ public class MainMenuScreen implements Screen {
         optionsButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.playing();
                game.setScreen(new Options(game));
                dispose();
             }
@@ -73,6 +86,7 @@ public class MainMenuScreen implements Screen {
         loadButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.playing();
                 game.setScreen(new Loads(game));
                 dispose();
             }
@@ -82,12 +96,15 @@ public class MainMenuScreen implements Screen {
         startButton = new TextButton("Новая игра", buttonStyle);
         startButton.setPosition(135,230);
         startButton.addListener(new ClickListener(){
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.playing();
                 game.setScreen(new GameProcess(game));
                 dispose();
             }
         });
+
 
         stage.addActor(startButton);
         stage.addActor(loadButton);
@@ -111,11 +128,34 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
 
-       if(stage != null){
-           stage.act(Gdx.graphics.getDeltaTime());
+        if (stage != null) {
+            stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
 
+        if (startButton.isPressed()) {
+            startButton.setPosition(135, 220);
+        } else {
+            startButton.setPosition(135, 230);
+        }
+
+        if (loadButton.isPressed()) {
+            loadButton.setPosition(135, 170);
+        } else {
+            loadButton.setPosition(135, 180);
+        }
+
+        if (optionsButton.isPressed()) {
+            optionsButton.setPosition(135, 120);
+        } else {
+            optionsButton.setPosition(135, 130);
+        }
+
+        if (exitButton.isPressed()) {
+            exitButton.setPosition(135, 70);
+        } else {
+            exitButton.setPosition(135, 80);
+        }
 
         game.batch.setProjectionMatrix(camera.combined);
     }
@@ -142,7 +182,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-    background.dispose();
-    stage.dispose();
+        background.dispose();
+        stage.dispose();
     }
 }
